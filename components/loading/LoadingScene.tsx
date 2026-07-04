@@ -2,13 +2,16 @@
 
 import { caffeine } from "@/data/molecules/caffeine";
 import BallStickMolecule from "@/components/molecule/BallStickMolecule";
+import { withBasePath } from "@/lib/base-path";
 import { Center, useGLTF } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Suspense, useLayoutEffect, useMemo, useRef } from "react";
 import type { Group, Object3D } from "three";
 import * as THREE from "three";
 
-useGLTF.preload("/logo.glb");
+const logoPath = withBasePath("/logo.glb");
+
+useGLTF.preload(logoPath);
 
 function fitObjectScale(object: Object3D, viewportWidth: number, viewportHeight: number) {
   const box = new THREE.Box3().setFromObject(object);
@@ -34,7 +37,7 @@ function ResponsiveOrthographicCamera() {
 
 function LogoModel() {
   const groupRef = useRef<Group>(null);
-  const { scene } = useGLTF("/logo.glb");
+  const { scene } = useGLTF(logoPath);
   const { viewport } = useThree();
 
   const model = useMemo(() => scene.clone(true), [scene]);

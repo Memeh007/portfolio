@@ -1,4 +1,5 @@
 import { site } from "@/lib/data";
+import { withBasePath } from "@/lib/base-path";
 
 export default function LandingHero() {
   return (
@@ -8,7 +9,7 @@ export default function LandingHero() {
       </h1>
       <p className="hero__subtitle">{site.tagline}</p>
 
-      <a href={site.resume.href} className="hero__cv" download>
+      <a href={withBasePath(site.resume.href)} className="hero__cv" download>
         {site.resume.label}
       </a>
     </section>
