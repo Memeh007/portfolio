@@ -1,0 +1,39 @@
+# AI ASSISTANT INSTRUCTIONS: PORTFOLIO CONTEXT
+
+You are helping build a personal portfolio website for Alexander Cecena. 
+Read this context carefully before generating any code, structural suggestions, or copy. Tailor all architectural decisions to match his dual expertise in biotechnology and software/hardware engineering.
+
+## 1. THE DEVELOPER
+- **Name:** Alexander Cecena
+- **Background:** 5th-year Biology and Biochemistry double major at CSUCI.
+- **Future:** Incoming Biomedical Engineering Master's student at CSUN.
+- **Current Roles:** Amgen Fellow; Researcher in the Munroe Lab (cellular aging and planaria); Environmental Consultant for the Green Generation Club.
+
+## 2. THE AESTHETIC & FRONTEND GOALS (earthtojake.com style)
+The portfolio should draw heavy inspiration from the minimalism and technical focus of **earthtojake.com**. It should not look like a traditional marketing portfolio, but rather a functional, developer-focused playground or engineering tool.
+- **Visual Style:** Bare-metal minimalism, clean typography, and UI that gets out of the way. The interface should feel like an interactive web-based CAD viewer or an open-source skills library.
+- **Core Elements:** Heavy integration of Three.js / WebGPU for 3D elements (specifically Earth visualizations and custom 3D avatar spritesheets with a subtle Y2K influence). 
+- **Tone:** Deeply technical, functional, and highly interactive. 
+
+## 3. CORE PROJECTS TO SHOWCASE
+When writing placeholders, routing, or database schemas, anticipate structures for these specific projects:
+
+### 3D Visualization & AI Software
+- **Earth GPS Dashboard:** An interactive 3D spatial visualization tool allowing users to select global locations, check capital cities, and view specific geographical data via an interactive Earth model.
+- **MEMAI:** A PyQt6-based dual-engine AI command center.
+- **Hermes WSL:** Custom local AI agents running in Windows Subsystem for Linux (vibe coding setups).
+
+### Bio-Engineering & Healthcare
+- **Biochem Pathways App:** An application designed to play, learn and visualize complex biochemical pathways of glycolysis.
+- **Munroe Lab LIMS:** A custom Laboratory Information Management System built specifically to manage laboratory samples, experimental data, and planaria husbandry.
+- **Molecubes CUBEFlow Restraint:** Designed a 3D-printable, ethical restraint system for a 26g mouse for use in a CT scanner.
+
+### Cybersecurity & Embedded Systems
+- **CYD ESP32 CrayZ Flasher:** A custom flashing tool built specifically for the CYD (Cheap Yellow Display) ESP32 hardware.
+- **Project Vanguard & Project Waveform:** Portable security auditing and wireless intrusion detection tools built on Raspberry Pi Zero 2 W hardware with LCD interfaces.
+
+## 4. CODING GUIDELINES FOR THIS PROJECT
+- Use TypeScript heavily. 
+- Prioritize modern, performant web frameworks (e.g., Next.js, React) suitable for integrating heavy 3D canvas elements (Three.js/React Three Fiber).
+- Ensure all 3D components and mathematical primitives are dynamically loaded so the initial time-to-interactive remains instant, maintaining that lightweight "tool" feel.
+- When generating copy or project descriptions, maintain a strictly professional, engineering-first tone that appeals to both tech recruiters (AI/software) and biotech professionals (Amgen/research labs).
