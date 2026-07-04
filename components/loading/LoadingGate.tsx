@@ -1,7 +1,11 @@
 "use client";
 
-import LoadingScreen from "@/components/loading/LoadingScreen";
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
+
+const LoadingScreen = dynamic(() => import("@/components/loading/LoadingScreen"), {
+  ssr: false,
+});
 
 const LOAD_MS = 4000;
 const FADE_MS = 500;

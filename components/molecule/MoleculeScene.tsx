@@ -114,7 +114,6 @@ export default function MoleculeScene({ molecule }: { molecule: Molecule }) {
       dpr={[1, 2]}
       style={{ background: "transparent" }}
     >
-      <color attach="background" args={["transparent"]} />
       <ambientLight intensity={0.75} />
       <directionalLight position={[5, 8, 6]} intensity={1.1} />
       <directionalLight position={[-4, -2, 5]} intensity={0.35} />

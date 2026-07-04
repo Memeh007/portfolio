@@ -5,13 +5,11 @@ import BallStickMolecule from "@/components/molecule/BallStickMolecule";
 import { withBasePath } from "@/lib/base-path";
 import { Center, useGLTF } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Suspense, useLayoutEffect, useMemo, useRef } from "react";
+import { Suspense, useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import type { Group, Object3D } from "three";
 import * as THREE from "three";
 
 const logoPath = withBasePath("/logo.glb");
-
-useGLTF.preload(logoPath);
 
 function fitObjectScale(object: Object3D, viewportWidth: number, viewportHeight: number) {
   const box = new THREE.Box3().setFromObject(object);
@@ -171,6 +169,10 @@ function LoadingSceneContent() {
 }
 
 export default function LoadingScene() {
+  useEffect(() => {
+    useGLTF.preload(logoPath);
+  }, []);
+
   return (
     <Canvas
       orthographic
