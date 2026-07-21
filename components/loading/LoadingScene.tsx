@@ -9,7 +9,7 @@ import { Suspense, useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import type { Group, Object3D } from "three";
 import * as THREE from "three";
 
-const logoPath = withBasePath("/logo.glb");
+const logoPath = withBasePath("/mylogo.glb");
 
 function fitObjectScale(object: Object3D, viewportWidth: number, viewportHeight: number) {
   const box = new THREE.Box3().setFromObject(object);

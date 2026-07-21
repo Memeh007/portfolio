@@ -22,12 +22,16 @@ export default function LoadingScreen({ exiting }: LoadingScreenProps) {
         <LoadingScene />
       </div>
 
-      <div className="loading-bar" aria-hidden="true">
-        <div className="loading-bar__oval">
-          <div className="loading-bar__blocks">
-            <span className="loading-bar__block" />
-            <span className="loading-bar__block" />
-            <span className="loading-bar__block" />
+      <div className="loading-screen__footer">
+        <p className="loading-screen__tagline">isnt this dev so cool</p>
+
+        <div className="loading-bar" aria-hidden="true">
+          <div className="loading-bar__oval">
+            <div className="loading-bar__blocks">
+              <span className="loading-bar__block" />
+              <span className="loading-bar__block" />
+              <span className="loading-bar__block" />
+            </div>
           </div>
         </div>
       </div>
