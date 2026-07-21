@@ -66,7 +66,8 @@ a {
   align-items: center;
   width: 100%;
   max-width: 100%;
-  padding: 0 clamp(1rem, 4vw, 1.5rem) calc(clamp(4rem, 10vh, 8rem) + env(safe-area-inset-bottom));
+  padding: calc(3.5rem + env(safe-area-inset-top)) clamp(1rem, 4vw, 1.5rem)
+    calc(clamp(4rem, 10vh, 8rem) + env(safe-area-inset-bottom));
   overflow-x: hidden;
 }
 
@@ -80,6 +81,67 @@ a {
 
 .background-canvas canvas {
   display: block;
+}
+
+/* ── 8-bit game promo (fixed top) ── */
+
+.game-promo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: 3.25rem;
+  padding: 0.5rem clamp(0.75rem, 3vw, 1.25rem);
+  padding-top: calc(0.5rem + env(safe-area-inset-top));
+  background: rgba(250, 250, 250, 0.92);
+  border-bottom: 2px solid #e02020;
+  backdrop-filter: blur(8px);
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.game-promo:hover {
+  background: rgba(255, 240, 240, 0.96);
+}
+
+.game-promo__sprite {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  background-repeat: no-repeat;
+  background-size: 256px 128px;
+  image-rendering: pixelated;
+  transform: scale(2);
+  transform-origin: center;
+  animation: game-promo-slash 0.55s steps(3) infinite;
+}
+
+@keyframes game-promo-slash {
+  from {
+    background-position: 0 -64px;
+  }
+  to {
+    background-position: -96px -64px;
+  }
+}
+
+.game-promo__label {
+  font-family: var(--font-press-start), var(--font-mono);
+  font-size: clamp(0.5rem, 2.4vw, 0.6875rem);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  color: #e02020;
+  text-transform: uppercase;
+  text-shadow:
+    2px 2px 0 #000000,
+    -1px -1px 0 rgba(255, 255, 255, 0.35);
+  text-align: center;
 }
 
 /* ── Hero ── */
@@ -332,6 +394,39 @@ a {
   text-wrap: balance;
   max-width: 100%;
   padding: 0 0.25rem;
+}
+
+.project__title-link {
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.project__title-link:hover {
+  opacity: 0.75;
+}
+
+.project__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1rem 0 0;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
+}
+
+.project__play-link {
+  color: #e02020;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.project__repo-link {
+  color: var(--fg-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .project__tag {

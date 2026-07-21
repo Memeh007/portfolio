@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
+import { Inter, Press_Start_2P, Space_Grotesk } from "next/font/google";
 import { site } from "@/lib/data";
 import "./globals.css";
 
@@ -11,6 +11,12 @@ const inter = Inter({
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space",
   subsets: ["latin"],
+});
+
+const pressStart = Press_Start_2P({
+  variable: "--font-press-start",
+  subsets: ["latin"],
+  weight: "400",
 });
 
 export const viewport: Viewport = {
@@ -63,7 +69,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} h-full antialiased`}>
+    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} ${pressStart.variable} h-full antialiased`}>
       <body className="min-h-full">{children}</body>
     </html>
   );

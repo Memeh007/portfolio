@@ -10,6 +10,11 @@ export const site = {
     label: "download cv",
     href: "/alexander-cecena-cv.pdf",
   },
+  gamePromo: {
+    label: "8 bit game, Play now!",
+    href: "https://memeh007.github.io/8bitgame/",
+    repository: "https://github.com/Memeh007/8bitgame",
+  },
 } as const;
 
 /* ── Skills ───────────────────────────────────────────────────────── */
@@ -89,9 +94,31 @@ export type Project = {
   tag: string;
   blurb: BlurbSegment[];
   technologies: readonly string[];
+  href?: string;
+  repository?: string;
 };
 
 export const projects: readonly Project[] = [
+  {
+    id: "pixel-warriors",
+    title: "Pixel Warriors",
+    accent: "#e02020",
+    tag: "2026 / game",
+    href: "https://memeh007.github.io/8bitgame/",
+    repository: "https://github.com/Memeh007/8bitgame",
+    blurb: [
+      { type: "text", value: "Open-source " },
+      { type: "term", value: "multiplayer 8-bit arena" },
+      { type: "text", value: " built with " },
+      { type: "term", value: "Phaser 3" },
+      { type: "text", value: ". Fight in a top-down pixel battlefield with " },
+      { type: "term", value: "real-time combat" },
+      { type: "text", value: ", weapons, and an authoritative " },
+      { type: "term", value: "Node.js server" },
+      { type: "text", value: " over Socket.IO. Last player standing wins." },
+    ],
+    technologies: ["Phaser 3", "TypeScript", "Socket.IO", "Node.js", "Vite"],
+  },
   {
     id: "memai",
     title: "MEMAI",
