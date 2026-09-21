@@ -54,6 +54,13 @@ export const projectCategories: ProjectCategory[] = [
         stack: ["React", "TypeScript", "Canvas", "SVG"],
       },
       {
+        slug: "custom-lab-lims-web",
+        name: "Custom Lab LIMS Web",
+        description:
+          "Multi-lab local LIMS with per-lab SQLite DBs, PubChem/CACTUS SMILES fetch, dark scientific UI, in-app guide, and security hardening for self-hosted research groups.",
+        stack: ["Python", "FastAPI", "SQLite", "Jinja2", "PubChem"],
+      },
+      {
         slug: "munroe-lab-lims",
         name: "Munroe Lab LIMS",
         description:
