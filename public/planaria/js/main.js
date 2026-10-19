@@ -45,7 +45,7 @@ try {
   throw err;
 }
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-renderer.setClearColor("#0b1114");
+renderer.setClearColor("#d4cdbf");
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 200);
@@ -62,18 +62,22 @@ controls.addEventListener("change", () => {
   needsRender = true;
 });
 
-scene.add(new THREE.HemisphereLight("#dce8ee", "#1b1511", 1.15));
-const sun = new THREE.DirectionalLight("#fff3e4", 1.7);
+scene.add(new THREE.HemisphereLight("#f6f3ec", "#6d6458", 1.2));
+const sun = new THREE.DirectionalLight("#ffffff", 1.5);
 sun.position.set(-4, 10, 5);
 scene.add(sun);
 
+// Transmitted-light stereomicroscope field: a glass petri dish of water on a lit stage.
 const dish = new THREE.Mesh(
-  new THREE.CircleGeometry(16, 96).rotateX(-Math.PI / 2),
+  new THREE.CircleGeometry(16, 128).rotateX(-Math.PI / 2),
   new THREE.ShaderMaterial({
     uniforms: {
-      uBg: { value: new THREE.Color("#0b1114") },
-      uCenter: { value: new THREE.Color("#18252b") },
-      uGrid: { value: new THREE.Color("#4b6873") },
+      uStage: { value: new THREE.Color("#d4cdbf") },
+      uField: { value: new THREE.Color("#e9e7e0") },
+      uFieldEdge: { value: new THREE.Color("#d9d5cb") },
+      uMeniscus: { value: new THREE.Color("#b9b2a5") },
+      uGlass: { value: new THREE.Color("#f7f6f2") },
+      uGlassEdge: { value: new THREE.Color("#8f877a") },
     },
     vertexShader: /* glsl */ `
       varying vec2 vP;
@@ -83,21 +87,34 @@ const dish = new THREE.Mesh(
       }
     `,
     fragmentShader: /* glsl */ `
-      uniform vec3 uBg;
-      uniform vec3 uCenter;
-      uniform vec3 uGrid;
+      uniform vec3 uStage;
+      uniform vec3 uField;
+      uniform vec3 uFieldEdge;
+      uniform vec3 uMeniscus;
+      uniform vec3 uGlass;
+      uniform vec3 uGlassEdge;
       varying vec2 vP;
-      float grid(vec2 p, float step, float width) {
-        vec2 q = p / step;
-        vec2 g = abs(fract(q - 0.5) - 0.5) / fwidth(q);
-        return 1.0 - min(min(g.x, g.y) / width, 1.0);
+      const float R_IN = 12.35;
+      const float R_OUT = 12.75;
+      float band(float r, float a, float b) {
+        float w = fwidth(r);
+        return smoothstep(a - w, a + w, r) * (1.0 - smoothstep(b - w, b + w, r));
+      }
+      float line(float r, float c) {
+        return 1.0 - smoothstep(0.0, fwidth(r) * 1.2, abs(r - c));
       }
       void main() {
         float r = length(vP);
-        vec3 col = mix(uCenter, uBg, smoothstep(1.5, 14.0, r));
-        float fade = 1.0 - smoothstep(5.0, 13.0, r);
-        col = mix(col, uGrid, (grid(vP, 1.0, 1.0) * 0.16 + grid(vP, 5.0, 1.2) * 0.22) * fade);
-        col += vec3(0.22, 0.32, 0.35) * (1.0 - smoothstep(0.0, 0.06, abs(r - 12.6))) * 0.3;
+        vec3 col = mix(uField, uFieldEdge, smoothstep(2.0, R_IN, r));
+        col = mix(col, uMeniscus, smoothstep(R_IN - 1.6, R_IN, r) * 0.45);
+        float wall = band(r, R_IN, R_OUT);
+        float glint = smoothstep(R_IN, R_OUT, r) * (1.0 - smoothstep(R_IN, R_OUT, r)) * 4.0;
+        col = mix(col, mix(uFieldEdge, uGlass, glint), wall);
+        float outside = smoothstep(R_OUT - fwidth(r), R_OUT + fwidth(r), r);
+        col = mix(col, uStage, outside);
+        col = mix(col, uGlassEdge, (line(r, R_IN) * 0.55 + line(r, R_OUT) * 0.7));
+        float grain = fract(sin(dot(floor(gl_FragCoord.xy), vec2(12.9898, 78.233))) * 43758.5453);
+        col *= 1.0 + (grain - 0.5) * 0.025;
         gl_FragColor = vec4(col, 1.0);
         #include <colorspace_fragment>
       }
@@ -374,7 +391,7 @@ function collectLabels() {
       pos.z += 0.35;
       dir = "d";
     }
-    out.push({ id: `frag-${i}`, pos, text: f.name, sub, dir, kind: "frag" });
+    out.push({ id: `frag-${i}`, pos, key: fragLetter(i), text: f.name, sub, dir, kind: "frag" });
   });
 
   const first = (key) => {
@@ -423,15 +440,17 @@ function updateLabels() {
     let el = labelPool.get(it.id);
     if (!el) {
       el = document.createElement("div");
-      el.innerHTML = '<span class="lbl__dot"></span><span class="lbl__tag"><b></b><i></i></span>';
+      el.innerHTML =
+        '<span class="lbl__dot"></span><span class="lbl__tag"><strong class="lbl__key"></strong><b></b><i></i></span>';
       labelLayer.appendChild(el);
       labelPool.set(it.id, el);
     }
     const cls = `lbl lbl--${it.dir}${it.kind ? ` lbl--${it.kind}` : ""}`;
     if (el.className !== cls) el.className = cls;
-    const key = `${it.text}|${it.sub ?? ""}`;
+    const key = `${it.key ?? ""}|${it.text}|${it.sub ?? ""}`;
     if (el.dataset.key !== key) {
       el.dataset.key = key;
+      el.querySelector(".lbl__key").textContent = it.key ?? "";
       el.querySelector("b").textContent = it.text;
       el.querySelector("i").textContent = it.sub ?? "";
     }
@@ -442,6 +461,19 @@ function updateLabels() {
     seen.add(it.id);
   }
   for (const [id, el] of labelPool) if (!seen.has(id)) el.hidden = true;
+}
+
+const orientArrow = $("#orient-arrow");
+const orientA = new THREE.Vector3();
+const orientB = new THREE.Vector3();
+
+function updateOrientation() {
+  orientA.set(0, BODY_LIFT, 0).project(camera);
+  orientB.set(0, BODY_LIFT, -1).project(camera);
+  const dx = orientB.x - orientA.x;
+  const dy = (orientB.y - orientA.y) / camera.aspect;
+  const deg = (Math.atan2(dx, dy) * 180) / Math.PI;
+  orientArrow.setAttribute("transform", `rotate(${deg.toFixed(1)} 17 17)`);
 }
 
 /* ── Panel & controls ─────────────────────────────────────────────── */
@@ -488,11 +520,13 @@ for (let d = 0; d <= DAY_MAX; d += 2) {
   $("#ticks").appendChild(tick);
 }
 
+const fragLetter = (i) => String.fromCharCode(97 + i);
+
 function buildFragmentList() {
   fragList.innerHTML = "";
   state.fragments.forEach((f, i) => {
     const li = document.createElement("li");
-    li.innerHTML = `<span class="frag__idx">${String.fromCharCode(65 + i)}</span><span class="frag__name">${f.name}</span><span class="frag__status"></span>`;
+    li.innerHTML = `<span class="frag__idx">${fragLetter(i)}</span><span class="frag__name">${f.name}</span><span class="frag__status"></span>`;
     fragList.appendChild(li);
   });
 }
@@ -724,6 +758,7 @@ renderer.setAnimationLoop((now) => {
     needsRender = false;
     renderer.render(scene, camera);
     updateLabels();
+    updateOrientation();
   }
 });
 

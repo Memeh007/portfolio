@@ -29,9 +29,9 @@ export class NeoblastField {
       transparent: true,
       depthTest: false,
       depthWrite: false,
-      blending: THREE.AdditiveBlending,
       uniforms: {
-        uColor: { value: new THREE.Color("#7ff0dc") },
+        uColor: { value: new THREE.Color("#c2187a") },
+        uRim: { value: new THREE.Color("#fbe7f2") },
         uScale: { value: 1 },
       },
       vertexShader: /* glsl */ `
@@ -48,13 +48,16 @@ export class NeoblastField {
       `,
       fragmentShader: /* glsl */ `
         uniform vec3 uColor;
+        uniform vec3 uRim;
         varying float vA;
         void main() {
           float r = length(gl_PointCoord - 0.5);
-          float glow = smoothstep(0.5, 0.0, r);
-          float a = pow(glow, 1.8) * vA;
+          float aa = fwidth(r) * 1.5;
+          float disc = 1.0 - smoothstep(0.47 - aa, 0.47, r);
+          float core = 1.0 - smoothstep(0.39 - aa, 0.39, r);
+          float a = disc * vA;
           if (a < 0.01) discard;
-          gl_FragColor = vec4(uColor * (0.55 + 0.9 * glow), a);
+          gl_FragColor = vec4(mix(uRim, uColor, core), a);
           #include <colorspace_fragment>
         }
       `,
@@ -121,7 +124,7 @@ export class NeoblastField {
       vF: (rand() * 2 - 1) * 0.75,
       reStart: 7.5 + rand() * 1.5,
       phase: rand() * Math.PI * 2,
-      size: 0.1 + rand() * 0.07,
+      size: 0.1 + rand() * 0.05,
     };
   }
 
@@ -146,7 +149,7 @@ export class NeoblastField {
       }
       let z;
       let v;
-      let a = 0.75;
+      let a = 0.9;
       if (p.kind === "prolif") {
         z = zT;
         v = vT;
