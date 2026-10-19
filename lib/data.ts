@@ -1,3 +1,5 @@
+import { withBasePath } from "@/lib/base-path";
+
 /* ── Site ─────────────────────────────────────────────────────────── */
 
 export const site = {
@@ -183,6 +185,27 @@ export const projects: readonly Project[] = [
       "REST API",
       "SQL",
     ],
+  },
+  {
+    id: "planaria-regeneration",
+    title: "Planaria Regeneration Explorer",
+    accent: "#c2185b",
+    tag: "2026 / visualization",
+    href: withBasePath("/planaria/index.html"),
+    blurb: [
+      { type: "text", value: "Interactive " },
+      { type: "term", value: "Three.js" },
+      { type: "text", value: " model of " },
+      { type: "term", value: "planarian regeneration" },
+      { type: "text", value: ". Cut a flatworm, then scrub a 14-day timeline as each fragment forms a " },
+      { type: "term", value: "blastema" },
+      { type: "text", value: ", regrows the missing head or tail, and remodels — with " },
+      { type: "term", value: "neoblast" },
+      { type: "text", value: " migration and a " },
+      { type: "term", value: "β-catenin RNAi" },
+      { type: "text", value: " polarity toggle. Grew out of research on metformin in Dugesia dorotocephala." },
+    ],
+    technologies: ["Three.js", "WebGL", "GLSL", "JavaScript", "Developmental Biology"],
   },
   {
     id: "earth-gps",
